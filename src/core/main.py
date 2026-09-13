@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import sys 
+import sys
 
 class Main:
     def __init__(self):
@@ -23,7 +23,7 @@ class Main:
             self.window.blit(
                 pygame.transform.scale(self.display, (640, 360)), (0, 0)
             )
-            self.window.update()
+            pygame.display.update()
 
 if __name__ == '__main__':
     main = Main()
