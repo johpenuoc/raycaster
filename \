@@ -25,10 +25,6 @@ class RaycastEngine:
         pp_2 = conf.PROJECTION_PLANE / 2
 
         for ray in range(pp):
-            if curr_ray_angle < 0:
-                curr_ray_angle = 360 + curr_ray_angle
-            elif curr_ray_angle > 360:
-                curr_ray_angle %= 360
             # render the ray-line
             d = abs(pp_2 - ray)
             x = cos(radians(curr_ray_angle)) * ray_len
@@ -38,19 +34,11 @@ class RaycastEngine:
                 display, (255, 0, 0), pos, (pos[0] - x, pos[1] - y)
             )
 
-            # calculate possible points of contact
-            #   these are only the initial (fist) points of contanct
-            chl_y = pos[1] - (pos[1] % ts) if curr_ray_angle >= 0 and curr_ray_angle <= 180 else pos[1] - (pos[1] % ts) + ts
-            opposite = pos[1] - chl_y
-            chl_x = pos[0] - (opposite / tan(radians(curr_ray_angle)))
-            chl = [chl_x, chl_y]
-            pygame.draw.rect(display, (0, 255, 0), (chl[0], chl[1], 2, 2))
+            # here we 'shoot' the ray and see if it hits anything
+            chl = [pos[0], pos[1] - (pos[1] % ts) if 0 <= self.theta <= 180 else pos[1] + (ts - (pos[1] % ts)]
+            chv = [pos[0] - (pos[0] % ts) if theta <= 90 or theta >= 180 else pos[0] + (ts - (pos[0] % ts)), pos[1]]
+            
 
-            cvl_x = pos[0] - (pos[0] % ts) if curr_ray_angle <= 90 or curr_ray_angle >= 270 else pos[0] - (pos[0] % ts) + ts
-            cvl__x = pos[0] - cvl_x
-            cvl_y = pos[1] - (tan(radians(curr_ray_angle)) * cvl__x)
-            cvl = [cvl_x, cvl_y]
-            pygame.draw.rect(display, (0, 0, 255), (cvl[0], cvl[1], 2, 2))
 
             # if it happens to hit something, render it below...
 
